@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .box {
+            margin: 1% 38%;
+            padding: 20px;
+            background-color: #f08a5d;
+            border-radius: 5px;
+            display: block;
+            text-align: center;
+        }
+
+        .form-group {
+            padding-top: 11px;
+        }
+
+        label,
+        input {
+            padding: 0 9px;
+        }
+
+        label {
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        input {
+            font-size: 15px;
+            width: 90%;
+            padding: 5px 5px;
+            background-color: #e8e8e8;
+            border: none;
+        }
+
+        button {
+            margin-top: 12px;
+            width: 100px;
+            padding: 5px 12px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        span.error {
+            margin-top: 2px;
+            font-size: 13px;
+            text-transform: uppercase;
+            color: red;
+        }
+
+        .hasil-tengah {
+            display: block;
+            text-align: -webkit-center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <form>
+            <div class="form-group">
+                <label>Nama Pelanggan</label>
+                <input type="text" placeholder="Nama Pelanggan" id="nama_pelanggan" name="nama_pelanggan">
+
+                <span class="error" id="errorNP"></span>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" placeholder="Email" id="email" name="email">
+
+                <span class="error" id="errorEmail"></span>
+            </div>
+            <div class="form-group">
+                <label>Jam Keberangkatan</label>
+                <input type="time" placeholder="Jam Keberangkatan" id="jam_keberangkatan" name="jam_keberangkatan">
+
+                <span class="error" id="errorJK"></span>
+            </div>
+            <div class="form-group">
+                <label>Tujuan Keberangkatan</label>
+                <input type="textTK" placeholder="Tujuan Keberangkatan" id="tujuan_keberangkatan" name="tujuan_keberangkatan">
+
+                <span class="error" id="errorTK"></span>
+            </div>
+            <div class="form-group">
+                <label>Jumlah Tiket</label>
+                <input type="number" placeholder="Jumlah Tiket" id="jumlah_tiket" name="jumlah_tiket">
+
+                <span class="error" id="errorJT"></span>
+            </div>
+
+            <button type="submit" onclick="return validasi()">SUBMIT</button>
+        </form>
+    </div>
+
+    <div class="hasil-tengah">
+        <div id="hasil"></div>
+    </div>
+</body>
+
+<script>
+    function validasi() {
+        let nama_pelanggan = document.getElementById("nama_pelanggan").value;
+        let email = document.getElementById("email").value;
+        let jam_keberangkatan = document.getElementById("jam_keberangkatan").value;
+        let tujuan_keberangkatan = document.getElementById("tujuan_keberangkatan").value;
+        let jumlah_tiket = document.getElementById("jumlah_tiket").value;
+
+        let errorNP = document.getElementById("errorNP");
+        let errorEmail = document.getElementById("errorEmail");
+        let errorJK = document.getElementById("errorJK");
+        let errorTK = document.getElementById("errorTK");
+        let errorJT = document.getElementById("errorJT");
+
+        let isValid = true;
+
+        // Nama Pelanggan
+        if (nama_pelanggan == '') {
+            isValid = false
+            errorNP.innerHTML = "Nama Pelanggan tidak boleh kosong"
+        } else if (nama_pelanggan.length > 30) {
+            isValid = false
+            errorNP.innerHTML = 'Maksimal 30 Karakter'
+        } else {
+            errorNP.innerHTML = ""
+        }
+
+        // Email
+        const v_email = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        if (email == "") {
+            isValid = false
+            errorEmail.innerHTML = "Email tidak boleh kosong"
+        } else if (!(v_email.test(email))) {
+            isValid = false;
+            errorEmail.innerHTML = 'Format email salah <br /> (aliv@gmail.com)'
+        } else {
+            errorEmail.innerHTML = ""
+        }
+
+        // Jam Keberangkatan
+        const v_time = /^([0-1]?[0-9]|2[0-4]).([0-5][0-9])(:[0-5][0-9])?$/;
+
+        if (jam_keberangkatan == '') {
+            isValid = false;
+            errorJK.innerHTML = 'Jam Keberangkatan tidak boleh kosong'
+        } else if (!(v_time.test(jam_keberangkatan))) {
+            isValid = false;
+            errorJK.innerHTML = 'Format waktu salah <br /> (00.00)'
+        } else {
+            errorJK.innerHTML = ""
+        }
+
+        // Tujuan Keberangkatan
+        if (tujuan_keberangkatan == '') {
+            isValid = false;
+            errorTK.innerHTML = 'Tujuan Keberangkatan tidak boleh kosong'
+        } else {
+            errorTK.innerHTML = ""
+        }
+
+        // Jumlah Tiket
+        if (jumlah_tiket == '') {
+            isValid = false;
+            errorJT.innerHTML = 'Jumlah Tiket tidak boleh kosong'
+        } else if (!(jumlah_tiket >= 1 && jumlah_tiket <= 10)) {
+            isValid = false;
+            errorJT.innerHTML = 'masukan antara 1-10'
+        } else {
+            errorJT.innerHTML = ""
+        }
+
+        if (isValid) {
+            document.getElementById('hasil').innerHTML =
+                `
+                    <table>
+                        <tr>
+                            <td>Nama Pelanggan</td>
+                            <td class="titikDua">:</td>
+                            <td>${nama_pelanggan}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td class="titikDua">:</td>
+                            <td>${email}</td>
+                        </tr>
+                        <tr>
+                            <td>Jam Keberangkatan</td>
+                            <td class="titikDua">:</td>
+                            <td>${jam_keberangkatan}</td>
+                        </tr>
+                        <tr>
+                            <td>Tujuan Keberangkatan</td>
+                            <td class="titikDua">:</td>
+                            <td>${tujuan_keberangkatan}</td>
+                        </tr>
+                        <tr>
+                            <td>Jumlah Tiket</td>
+                            <td class="titikDua">:</td>
+                            <td>${jumlah_tiket}</td>
+                        </tr>
+                    </table>
+                `
+        } else {
+            document.getElementById('hasil').innerHTML = ''
+        }
+
+        return false
+    }
+</script>
+
+</html>
